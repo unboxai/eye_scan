@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Login or Sign Up | UNBOX AI</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+    </head>
+<body>
+    <div class="cont">
+	<form method="POST" action="{% url 'login' %}">
+        <div class="form sign-in">
+            <h2>Sign-in</h2>
+			<label>
+                <i class="fa-solid fa-user" style="position: absolute; opacity: 0.5; margin-top: 0.1rem"></i>
+                <input type="username" placeholder='Username'name="username" required>
+            </label>
+            <label>
+                <i class="fa-solid fa-lock" style="position: absolute; opacity: 0.5; margin-top: 0.1rem"></i>
+                <input id="login_password" type="password" placeholder="Password" name="password" required>
+                <i class="fa-solid fa-eye-slash" id="hide_or_show_password" onclick="hide_or_show_password()"></i>
+            </label>
+            <button type="submit" class="submit">
+                <span>LOG IN</span>
+                <div class="wave"></div>
+            </button>
+			{% if error_message %}
+				<center><p id="message_p">{{ error_message }}</p></center>
+			{% endif %}
+			{% if success_message %}
+				<center><p style="background-color:#b7ffd6;" id="message_p">{{ success_message }}</p></center>
+			{% endif %}
+        </div>
+	</form>
+	
+	<form class="validateForm" method="POST" action="{% url 'signup' %}" id="signup_form">
+		{% csrf_token %}
+        <div class="sub-cont">
+            <div class="img">
+                <div class="img__text m--up">
+                    <h2>UNBOX AI</h2>
+                    <h3>New to UNBOX AI?</h3>
+                </div>
+                <div class="img__text m--in">
+                    <h2>UNBOX AI</h2>
+                    <h3>Have an account? Sign in.<h3>
+                </div>
+                <div class="img__btn">
+                    <span class="m--up">Sign Up</span>
+                    <span class="m--in">Sign In</span>
+                </div>
+            </div>
+            <div class="form sign-up">
+                <h2>Create Account</h2>
+                <label>
+                    <i class="fa-solid fa-id-card-clip" style="position: absolute; opacity: 0.5; margin-top: 0.1rem"></i>
+                    <input type="text" placeholder="Name"  name="name" required>
+                </label>
+				<label>
+                    <i class="fa-solid fa-hashtag" style="position: absolute; opacity: 0.5; margin-top: 0.1rem"></i>
+                    <input type="number" placeholder="Age" max=120 min=10 name="age" required>
+                </label>
+                <label>
+                    <i class="fa-solid fa-envelope" style="position: absolute; opacity: 0.5; margin-top: 0.1rem"></i>
+                    <input type="email"  placeholder="Email" name="email" required>
+                </label>
+				 <label>
+                    <i class="fa-solid fa-user" style="position: absolute; opacity: 0.5; margin-top: 0.1rem"></i>
+                    <input type="username" id="username" placeholder="Username" name="username" required>
+                </label>
+                <label>
+                    <i class="fa-solid fa-lock" style="position: absolute; opacity: 0.5; margin-top: 0.1rem"></i>
+                    <input type="password" placeholder="Password" id="password" name="password" required>
+                    <i class="fa-solid fa-eye-slash" id="hide_or_show_password2" onclick="hide_or_show_password2()"></i>
+                </label>
+                <label>
+                    <i class="fa-solid fa-lock" style="position: absolute; opacity: 0.5; margin-top: 0.1rem"></i>
+                    <input type="password" placeholder="Confirm Password" id="confirm-password" name="password" required>
+                    <i class="fa-solid fa-eye-slash" id="hide_or_show_password3" onclick="hide_or_show_password3()"></i>
+                </label>
+				 
+                <button type="submit" class="submit" id="signup_button">
+                    <span>SIGN UP</span>
+                    <div class="wave"></div>
+                </button>
+				<center><p id="message_p2"></p></center>
+            </div>
+			
+        </div>
+		</form>
+    </div>
+	
+
+    <script>
+        document.querySelector('.img__btn').addEventListener('click', function() {
+            document.querySelector('.cont').classList.toggle('s--signup');
+        });
+		$('#username').focusout(function() {
+            var form = $('#signup_form')[0];
+            var formData = new FormData(form);
+            formData.append('username', $("#username").val());
+            $.ajax({
+                url: "{% url 'check_username' %}",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                async: true,
+                //beforeSend: function(response) {
+                    
+                //},
+                success: function(response) {
+                    $(document).ready(function(){
+                        if (response == "1"){
+                            // the username already exists
+                            $('#message_p2').html('This username is already taken!');
+                            $('#message_p2').css('visibility', 'visible');
+                            $("#username").css('color', 'red');
+                            $("#signup_button").prop('disabled', true);
+                        }
+                        else{
+                            // the username is available
+                            $('#message_p2').html('');
+                            $('#message_p2').css('visibility', 'hidden');
+                            $("#username").css('color', 'black');
+                            $("#signup_button").prop('disabled', false);
+                        }
+                    });
+                },
+            });
+		});// End function for focusout
+        function hide_or_show_password() {
+            var x = document.getElementById("login_password");
+            if (x.type === "password") {
+                $("#hide_or_show_password").removeClass('fa-eye-slash');
+                $("#hide_or_show_password").addClass('fa-eye');
+                x.type = "text";
+            } else {
+                $("#hide_or_show_password").removeClass('fa-eye');
+                $("#hide_or_show_password").addClass('fa-eye-slash');
+                x.type = "password";
+            }
+        }
+        function hide_or_show_password2() {
+            var y = document.getElementById("password");
+            if (y.type === "password") {
+                $("#hide_or_show_password2").removeClass('fa-eye-slash');
+                $("#hide_or_show_password2").addClass('fa-eye');
+                y.type = "text";
+            } else {
+                $("#hide_or_show_password2").removeClass('fa-eye');
+                $("#hide_or_show_password2").addClass('fa-eye-slash');
+                y.type = "password";
+            }
+        }
+        function hide_or_show_password3() {
+            var z = document.getElementById("confirm-password");
+            if (z.type === "password") {
+                $("#hide_or_show_password3").removeClass('fa-eye-slash');
+                $("#hide_or_show_password3").addClass('fa-eye');
+                z.type = "text";
+            } else {
+                $("#hide_or_show_password3").removeClass('fa-eye');
+                $("#hide_or_show_password3").addClass('fa-eye-slash');
+                z.type = "password";
+            }
+        }
+    </script>
+
+    {% if success %}
+        <script>
+            $('#message_p').html('{{ success }}');
+         </script>
+    {% endif %}
+
+    <div id="success-alert" style="display: none;"></div>
+	
+	
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito&display=swap');
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #ffffff;
+    font-family: 'Nunito', sans-serif;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+
+h2{
+    font-size:25px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.m--up h2, .m--in h2{
+    font-family: 'Bebas Neue', sans-serif;
+    font-size:40px;
+}
+
+input, button {
+    border: none;
+    outline: none;
+    background: none;
+    font-family: 'Nunito', sans-serif;
+}
+
+.tip {
+    font-size: 20px;
+    margin: 40px auto 50px;
+    text-align: center;
+}
+
+.cont {
+    overflow: hidden;
+    position: relative;
+    width: 900px;
+    height: 600px;
+    margin: 0 auto 100px;
+    background: #fff;
+}
+
+.form {
+    position: relative;
+    width: 640px;
+    height: 100%;
+    -webkit-transition: -webkit-transform 1.2s ease-in-out;
+    transition: -webkit-transform 1.2s ease-in-out;
+    transition: transform 1.2s ease-in-out;
+    transition: transform 1.2s ease-in-out, -webkit-transform 1.2s ease-in-out;
+    padding: 50px 30px 0;
+    margin-top: 2rem;
+}
+
+.sub-cont {
+    overflow: hidden;
+    position: absolute;
+    left: 640px;
+    top: 0;
+    width: 900px;
+    height: 100%;
+    padding-left: 260px;
+    background: #fff;
+    -webkit-transition: -webkit-transform 1.2s ease-in-out;
+    transition: -webkit-transform 1.2s ease-in-out;
+    transition: transform 1.2s ease-in-out;
+    transition: transform 1.2s ease-in-out, -webkit-transform 1.2s ease-in-out;
+}
+
+.cont.s--signup .sub-cont {
+    -webkit-transform: translate3d(640px, 0, 0);
+    transform: translate3d(-640px, 0, 0);
+}
+
+button {
+    display: block;
+    margin: 0 auto;
+    width: 260px;
+    height: 36px;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.img {
+    overflow: hidden;
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 260px;
+    height: 100%;
+    margin-top: 2rem;
+    padding-top: 460px;
+}
+
+.img:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 900px;
+    height: 100%;
+    background-image: url("/static/drishti/images/Blue_BG.jpg");
+    opacity: 0.8;
+    -webkit-transition: -webkit-transform 1.2s ease-in-out;
+    transition: transform 1.2s ease-in-out;
+    transition: transform 1.2s ease-in-out, -webkit-transform 1.2s ease-in-out;
+}
+
+.img:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/drishti/images/Blue_BG.jpg');
+}
+
+.cont.s--signup .img:before {
+    -webkit-transform: translate3d(640px, 0, 0);
+    transform: translate3d(640px, 0, 0);
+}
+
+.img__text {
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    top: 50px;
+    width: 100%;
+    padding: 0 20px;
+    text-align: center;
+    color: #fff;
+    -webkit-transition: -webkit-transform 1.2s ease-in-out;
+    transition: -webkit-transform 1.2s ease-in-out;
+    transition: transform 1.2s ease-in-out;
+    transition: transform 1.2s ease-in-out, -webkit-transform 1.2s ease-in-out;
+}
+
+.img__text h2 {
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+.img__text h3 {
+    margin-top: 315px;
+    margin-bottom: 10px;
+    font-weight: 100;
+}
+
+.img__text p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.cont.s--signup .img__text.m--up {
+    -webkit-transform: translateX(520px);
+    transform: translateX(520px);
+}
+
+.img__text.m--in {
+    -webkit-transform: translateX(-520px);
+    transform: translateX(-520px);
+}
+
+.cont.s--signup .img__text.m--in {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+}
+
+.img__btn {
+    overflow: hidden;
+    z-index: 2;
+    position: relative;
+    width: 100px;
+    height: 36px;
+    margin: 0 auto;
+    background: transparent;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.img__btn:after {
+    content: '';
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #fff;
+    border-radius: 30px;
+}
+
+.img__btn span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    -webkit-transition: -webkit-transform 1.2s;
+    transition: -webkit-transform 1.2s;
+    transition: transform 1.2s;
+    transition: transform 1.2s, -webkit-transform 1.2s;
+}
+
+.img__btn span.m--in {
+    -webkit-transform: translateY(-72px);
+    transform: translateY(-72px);
+}
+
+.cont.s--signup .img__btn span.m--in {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+}
+
+.cont.s--signup .img__btn span.m--up {
+    -webkit-transform: translateY(72px);
+    transform: translateY(72px);
+}
+
+label {
+    display: block;
+    width: 260px;
+    margin: 25px auto 0;
+    text-align: left;
+}
+
+label span {
+    font-size: 12px;
+    color: #cfcfcf;
+    text-transform: uppercase;
+}
+
+input {
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+#hide_or_show_password, #hide_or_show_password2, #hide_or_show_password3{
+    position: absolute; opacity: 0.5;
+    margin: -1.5rem 0 0 37%;
+}
+
+#login_password{
+    padding-right: 3rem;
+}
+
+#hide_or_show_password:hover{
+    cursor: pointer;
+}
+
+#hide_or_show_password2:hover{
+    cursor: pointer;
+}
+
+#hide_or_show_password3:hover{
+    cursor: pointer;
+}
+
+.sign-in input, .sign-up input{
+    padding: 0 0 5px 1.5rem;
+    margin: 0;
+}
+
+.forgot-pass {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 12px;
+    color: #cfcfcf;
+}
+
+.fb-btn {
+    border: 2px solid #d3dae9;
+    color: #8fa1c7;
+}
+
+.fb-btn span {
+    font-weight: bold;
+    color: #455a81;
+}
+
+.sign-in {
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+
+.cont.s--signup .sign-in {
+    -webkit-transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out;
+    -webkit-transition-duration: 1.2s;
+    transition-duration: 1.2s;
+    -webkit-transform: translate3d(640px, 0, 0);
+    transform: translate3d(640px, 0, 0);
+}
+
+.sign-up {
+    -webkit-transform: translate3d(-900px, 0, 0);
+    transform: translate3d(-900px, 0, 0);
+}
+
+.cont.s--signup .sign-up {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+#message_p{
+    font-size: 0.8rem;
+    background: #ffc796;
+    margin: 1rem 0 1rem 0;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.3rem;
+    width: 45%;
+}
+
+#message_p2{
+    font-size: 0.8rem;
+    background: #ffc796;
+    margin: 1rem 0 1rem 0;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.3rem;
+    visibility: hidden;
+    width: 45%;
+}
+
+.submit {
+        margin-top: 40px;
+        margin-bottom: 20px;
+        background: #2196F3;
+        text-transform: uppercase;
+        width: 260px;
+        height:50px;   
+        position: relative;
+        display: block;
+        text-decoration: none;
+        border-radius: 0;
+        overflow: hidden;
+    }
+    .submit:hover .wave {
+        top: -200px;
+    }
+    .submit span {
+        position: relative;
+        z-index: 1;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        letter-spacing: 4px;
+    }
+    .submit .wave {
+        width: 260px;
+        height: 260px;
+        background-color: #2196F3;
+        box-shadow: inset 0 0 50px rgba(0, 0, 0, .5);
+        position: absolute;
+        left: 0px;
+        top: -100px;
+        transition: 0.4s;
+    }
+    .submit .wave::before, .submit .wave::after {
+        width: 200%;
+        height: 200%;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -75%);
+    }
+    .submit .wave::before {
+        border-radius: 45%;
+        background-color: rgb(0, 0, 0);
+        animation: wave 5s linear infinite;
+    }
+    .submit .wave::after {
+        border-radius: 40%;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: wave 10s linear infinite;
+    }
+    @keyframes wave {
+        0% {
+            transform: translate(-50%, -75%) rotate(0deg);
+        }
+        100% {
+            transform: translate(-50%, -75%) rotate(360deg);
+        }
+    }
+
+
+
+
+
+
+
+
+
+@media only screen and (max-width: 768px) {
+
+    body{
+        overflow: hidden;
+    }
+
+    .cont{
+        height: 100rem;
+        width: 100%;
+    }
+    h2{
+        font-size:2rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    .m--up h2, .m--in h2{
+        font-family: 'Bebas Neue', sans-serif;
+        font-size:3rem;
+        margin: 0;
+    }
+
+    .form {
+        margin-top: 0;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        -webkit-transition: -webkit-transform 1.2s ease-in-out;
+        transition: -webkit-transform 1.2s ease-in-out;
+        transition: transform 1.2s ease-in-out;
+        transition: transform 1.2s ease-in-out, -webkit-transform 1.2s ease-in-out;
+        padding: 0;
+    }
+
+    input {
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    #hide_or_show_password, #hide_or_show_password2, #hide_or_show_password3{
+        margin: -1.5rem 0 0 72%;
+    }
+
+    #login_password{
+        padding-right: 3rem;
+    }
+
+    #message_p{
+        font-size: 1rem;
+        margin-top: 2rem;
+    }
+
+
+    label {
+        display: block;
+        width: 80%;
+        margin: 1.4rem auto 0;
+        text-align: left;
+    }
+
+    .sign-in{
+        z-index: 2;
+        margin-top: 8rem;
+    }
+
+    .sub-cont {
+        overflow: visible;
+        position: absolute;
+        left: 0;
+        margin-top: 26rem;
+        top: 0;
+        width: 100%;
+        height: 100rem;
+        padding: 0;
+    }
+
+    .cont.s--signup .sub-cont {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
+    .cont.s--signup .img:before {
+        -webkit-transform: translate3d(0, 40px, 0);
+        transform: translate3d(0, 40px, 0);
+    }
+
+    .cont.s--signup .img__text.m--up {
+        -webkit-transform: translateY(-520px);
+        transform: translateY(-520px);
+    }
+
+    .img__text.m--in {
+        -webkit-transform: translateY(50rem);
+        transform: translateY(50rem);
+    }
+
+    .cont.s--signup .img__text.m--in {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+
+    .img__btn span.m--in {
+        -webkit-transform: translateY(50rem);
+        transform: translateY(50rem);
+    }
+
+    .cont.s--signup .img__btn span.m--in {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+
+    .cont.s--signup .img__btn span.m--up {
+        -webkit-transform: translateY(-50rem);
+        transform: translateY(-50rem);
+    }
+
+    .cont.s--signup .sign-in {
+        -webkit-transform: translate3d(0, -50rem, 0);
+        transform: translate3d(0, -50rem, 0);
+    }
+
+    .sign-up {
+        margin-top: -24.5rem;
+        -webkit-transform: translate3d(0, 50rem, 0);
+        transform: translate3d(0, 50rem, 0);
+        background: none;
+        overflow: hidden;
+    }
+
+    .img {
+        position: absolute;
+        margin-top: 33%;
+        width: 100%;
+        height: 40rem;
+        padding-top: 7rem;
+    }
+
+    .img:before {
+        background-size: cover;
+        opacity: 1;
+        filter: brightness(50%);
+    }
+
+    .img:after {
+        background-size: cover;
+        opacity: 1;
+        filter: brightness(50%)
+    }
+
+    .img__text {
+        z-index: 2;
+        position: absolute;
+        left: 0;
+        top: 1rem;
+        width: 100%;
+        padding: 0 20px;
+        text-align: center;
+        color: #fff;
+        -webkit-transition: -webkit-transform 1.2s ease-in-out;
+        transition: -webkit-transform 1.2s ease-in-out;
+        transition: transform 1.2s ease-in-out;
+        transition: transform 1.2s ease-in-out, -webkit-transform 1.2s ease-in-out;
+    }
+
+    .img__text h3 {
+        margin-top: 0;
+        font-weight: 100;
+        font-size: 1rem;
+    }
+
+    .img__btn {
+        width: 8rem;
+        height: 2rem;
+        margin: 0 auto;
+        background: #000000;
+        color: #fff;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+    
+    .m--up, .m--in{
+        font-size: 1rem;
+    }
+
+    #message_p{
+        width: 80%;
+    }
+
+    #message_p2{
+        width: 80%;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    .submit {
+        width: 80%;
+        height: 3rem;   
+        position: relative;
+        display: block;
+        text-decoration: none;
+        border-radius: 0;
+        overflow: hidden;
+        margin-top: 2rem;
+        margin-bottom: 20px;
+        background: #2196F3;
+        text-transform: uppercase;
+    }
+    .submit:hover .wave {
+        top: -200px;
+    }
+    .submit span {
+        position: relative;
+        z-index: 1;
+        color: white;
+        font-weight: bold;
+        font-size: 15px;
+        letter-spacing: 8px;
+    }
+    .submit .wave {
+        width: 20rem;
+        height: 20rem;
+        background-color: #2196F3;
+        box-shadow: inset 0 0 50px rgba(0, 0, 0, .5);
+        position: absolute;
+        left: 0rem;
+        top: -9.5rem;
+        transition: 0.4s;
+    }
+    .submit .wave::before, .submit .wave::after {
+        width: 220%;
+        height: 220%;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 45%;
+        transform: translate(-50%, -75%);
+    }
+    .submit .wave::before {
+        border-radius: 45%;
+        background-color: rgb(0, 0, 0);
+        animation: wave 5s linear infinite;
+    }
+    .submit .wave::after {
+        border-radius: 40%;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: wave 10s linear infinite;
+    }
+
+}
+
+
+
+
+</style>
+	
+	
+	
+</body>
+</html>

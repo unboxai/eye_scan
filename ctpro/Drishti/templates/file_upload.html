@@ -1,0 +1,73 @@
+<HTML>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.css">
+</head>
+
+<body>
+<div class="wrapper">
+    <input type="file" id="file" />
+    <label for="file" class="btn-3">
+      <span>select</span>
+    </label>  
+</div>
+
+
+<style>
+
+[type="file"] {
+	 height: 0;
+	 overflow: hidden;
+	 width: 0;
+}
+ [type="file"] + label {
+	 border: none;
+	 color: #fff;
+	 cursor: pointer;
+	 display: inline-block;
+	 font-weight: 500;
+	 margin-bottom: 1rem;
+	 outline: none;
+	 padding: 1rem 50px;
+	 position: relative;
+	 transition: all 0.3s;
+	 vertical-align: middle;
+     text-align: center;
+}
+ [type="file"] + label.btn-3 {
+	 background-color: #2196F3;
+	 border-radius: 0;
+	 overflow: hidden;
+}
+ [type="file"] + label.btn-3 span {
+	 display: inline-block;
+	 transition: all 0.3s;
+	 width: 100%;
+}
+ [type="file"] + label.btn-3::before {
+	 color: #fff;
+	 content: "\f0ee";
+     font: var(--fa-font-solid);
+	 font-size: 130%;
+	 height: 100%;
+	 left: 0;
+	 line-height: 2.6;
+	 position: absolute;
+	 top: -180%;
+	 transition: all 0.3s;
+	 width: 100%;
+}
+ [type="file"] + label.btn-3:hover {
+	 background-color: #155589;
+}
+ [type="file"] + label.btn-3:hover span {
+	 transform: translateY(300%);
+}
+ [type="file"] + label.btn-3:hover::before {
+	 top: 0;
+}
+ 
+
+</style>
+</body>
+</HTML>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Image Analysis Report</title>
+  <style>
+    /* Define some basic styles for the report */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 16px;
+      padding: 20px;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    caption {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Image Analysis Report</h1>
+  <table>
+    <caption>Report Data</caption>
+    <thead>
+      <tr>
+        <th>Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ message }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2>
+    Information on Cataract:
+  </h2>
+  <p>
+   Cataract is a common eye condition that affects millions of people worldwide. <br> 
+   It is characterized by the clouding of the natural lens of the eye, leading to a progressive loss of vision. <br>
+   Cataracts can occur due to various factors, including aging, exposure to ultraviolet radiation, <br>
+   certain medical conditions (such as diabetes), genetic predisposition, and lifestyle choices <br> 
+   like smoking and excessive alcohol consumption. 
+  </p>
+  <p> For more informatio on Cataract and what to do in case of a detection</p> <button type="button" onclick="window.location.href='https://en.wikipedia.org/wiki/Cataract'">Click here</button>
+</body>
+</html>

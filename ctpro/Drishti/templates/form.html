@@ -1,0 +1,1464 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>UNBOX AI - Cataract Screening tool</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+</head>
+
+    <body>
+        <div class="container">
+            <div class="container__item landing-page-container">
+                <div class="content__wrapper">
+                    <header class="header">
+                        <h1 class="header__item">Drishti.</h1>
+                        <br><p class="user-name"><i class="fa fa-user-circle"></i>{{ request.session.username }}</p>
+                        <p id="p1">This AI powered tool will take in some information <br> 
+                            and an image of the eye and analyse it to detect <br>
+                            if there are any signs of cataract <br>
+                            in the eye.</p><br>
+							
+                            <form method="post" enctype="multipart/form-data" id="image_form">
+                                <label>
+                                    <i class="fa-solid fa-id-card-clip"></i>
+                                    <input type="text" id="name_" placeholder="Name"  name="name" required>
+                                </label>
+                                <label>
+                                    <i class="fa-solid fa-hashtag" style="position: absolute; opacity: 0.5; margin: 0.2rem 0 0 0"></i>
+                                    <input type="number" id="age_" placeholder="Age" max=120 min=10 name="age" required>
+                                </label>
+                                <label>
+                                    <select id="visual-symptoms" name="visual-symptoms" required style="color:black">
+                                        <option value="no symptoms">No Symptoms</option>
+                                        <option value="blurred vision">Blurred Vision</option>
+                                        <option value="whitening and cloudiness in vision">Whitening and cloudiness in vision</option>
+                                        <option value="double vision">Double vision</option>
+                                        <option value="multiple images">Multiple images</option>
+                                        <option value="halos or light scattering">Halos or light scattering</option>
+                                        <option value="pain in eyes">Pain in eyes</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    <div class="wrapper" style="padding:0; margin: 0">
+                                        <input type="file" id="file" style="display:none" required>
+                                        <label for="file" class="btn-3">
+                                          <span>Select Image</span>
+                                        </label>  
+                                    </div>
+                                </label>
+                                <a class="image_info" onclick="myFunction()">Show Image Info</a>
+                                <p id="file_path"></p>
+                                <label>
+                                    <script>
+                                        function myFunction() {
+                                          var x = document.getElementById("file").value;
+                                          if (x == ""){
+                                            var message = "Please upload an image first"
+                                            document.getElementById("file_path").innerHTML = message;
+                                          }
+                                          else{
+                                            document.getElementById("file_path").innerHTML = x;
+                                          }
+                                        }
+                                    </script>                                        
+                                </label>
+                                <button id="upload-button" class="submit" type="button">
+                                    <span><i class="fa fa-search"></i> ANALYZE</span>
+                                    <div class="wave"></div>
+                                </button>
+                            </form>
+
+
+							<dialog id="dialog">
+
+                                <div class="column-row">
+                                    <div class="column-dialog-1">
+                                        <div class="loading" id="#LoadingAnimation"> 
+                                            <svg width="16px" height="12px">
+                                                <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+                                                <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+                                            </svg>
+                                        </div>
+        
+                                        <h2 id="dialog-heading">Image Analysis Report</h2>
+                                        <h3 id="result-heading">Result</h3>
+                                        <div id="result" >
+                                            <p>This is the result</p>
+                                        </div>
+                                        <div id="result-tip" >
+                                            <p></p>
+                                        </div>
+                                        <section id="score" class="content">
+                                            <div class="box gauge--3">
+                                                <div class="mask">
+                                                    <div class="semi-circle"></div>
+                                                    <div class="semi-circle--mask"></div>
+                                                </div>
+                                            </div>
+                                            <div class="gauge-value-row">
+                                                <div class="gauge-value">
+                                                    <h3>0</h3>
+                                                </div>
+                                                <div class="gauge-value">
+                                                    <h1 id="gauge-value">0%</h1>
+                                                </div>    
+                                                <div class="gauge-value">
+                                                    <h3>100</h3>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    <div class="column-dialog-2">
+                                        <h2 id="cataract-heading">What is Cataract?</h2>
+                                        <p id="cataract-info">
+                                            Cataract is a common eye condition that affects millions of people worldwide.
+                                            It is characterized by the clouding of the natural lens of the eye, leading to a progressive loss of vision.
+                                            Cataracts can occur due to various factors, including aging, exposure to UV radiation,
+                                            certain medical conditions (such as diabetes), genetic predisposition, and lifestyle choices
+                                            like smoking and excessive alcohol consumption.
+                                
+                                            For more information on Cataract and what to do in case of a detection, visit
+                                            <a href="https://en.wikipedia.org/wiki/Cataract" target="_blank">here.</a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr id="result-cataract-info-divider">
+                                <p class="disclaimer">Disclaimer: This application uses a Deep Learning Neural Network and other technologies to build an algorithm that takes an image of the eye with some other inputs and applies multiple algorithms to analyze if the eye in the image has cataract. This analysis may or may not be correct everytime. When performed on a test set, our algorithm has shown an accuracy of 94%. This tool is intended for screening and early detection of cataract purposes but is still under improvement and development. The report of this tool is not a final medical diagnosis. Please consult a qualified medical doctor to get a thorough evaluation of your eye if you are facing any kind of health symptoms.</p>
+								<button aria-label="close" class="x">❌</button>
+							</dialog>
+
+
+							<ul>
+								<li style="--accent-color:#2196F3">
+									<div class="icon"><i class="fa fa-cloud-upload" aria-hidden="true"></i></div>
+									<div class="title">Upload</div>
+									<div class="descr">Choose a file to upload</div>
+								</li>
+								<li style="--accent-color:#2196F3">
+									<div class="icon"><i class="fa fa-search"></i></div>
+									<div class="title">Analyze</div>
+									<div class="descr">Click the Analyze button to see the final report</div>
+								</li>
+							</ul>
+
+							<p class="note"><i class="fa fa-sticky-note" style="padding-right: 7px;"></i>This is a data-driven algorithm that has <br>
+								learned from data and gives predictions <br>
+								using AI-powered algorithms.
+                            </p>
+
+
+                     </header>
+                    
+                    <div class="ellipses-container">
+                        <img class="ellipses ellipses__outer--eye" src="\static\drishti\images\blue_eye.png">
+                        <div class="ellipses ellipses__outer--thin">
+                            <div class="ellipses ellipses__orbit"></div>
+                        </div>
+                        <div class="ellipses ellipses__outer--thick"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">                            
+            <p class="footer-top">Developed and owned by</p>
+            <b><p class="footer-bottom">UNBOX AI Incorporation.</p></b> 
+        </div>
+
+	<script>
+		$(function () {
+			$.ajaxSetup({
+				headers: { "X-CSRFToken": getCookie("csrftoken") }
+			});
+		});
+		function getCookie(c_name){
+			if (document.cookie.length > 0)
+			{
+				c_start = document.cookie.indexOf(c_name + "=");
+				if (c_start != -1)
+				{
+					c_start = c_start + c_name.length + 1;
+					c_end = document.cookie.indexOf(";", c_start);
+					if (c_end == -1) c_end = document.cookie.length;
+					return unescape(document.cookie.substring(c_start,c_end));
+				}
+			}
+			return "";
+		}
+		$(document).ready(function() {  
+			$('#upload-button').click(function() {
+				var form = $('#image_form')[0];
+				var formData = new FormData(form);
+				formData.append('name', $("#name_").val());
+				formData.append('age', $("#age_").val());
+				formData.append('visual-symptoms', $("#visual-symptoms").val());
+				var files = form.files;
+				var image_ = $("#file")[0].files[0];
+				if (image_ == undefined){
+					var message = "Please upload an image first"
+					document.getElementById("file_path").innerHTML = message;
+					return false;
+				}
+                if ($("#name_").val()=="" || $("#age_").val()==""){
+                    var message = "Please enter all the required fields."
+					document.getElementById("file_path").innerHTML = message;
+					return false;
+                }
+				formData.append("image", image_);
+				var rand_int = Math.floor(Math.random()*7);
+                if (rand_int == 0){
+                    document.getElementById("result-tip").innerHTML = "<i class='fa-duotone fa-lightbulb' style='--fa-primary-color: #9e9e9e; --fa-secondary-color: #ffbb00; font-size: 1.5rem; --fa-secondary-opacity: 1; padding-right: 7px'></i>Prolonged exposure to ultraviolet (UV) radiation can contribute to cataract development. Wear sunglasses with 100% UV protection and a wide-brimmed hat when you're outdoors, especially during peak sun hours.";
+                }
+                if (rand_int == 1){
+                    document.getElementById("result-tip").innerHTML = "<i class='fa-duotone fa-lightbulb' style='--fa-primary-color: #9e9e9e; --fa-secondary-color: #ffbb00; font-size: 1.5rem; --fa-secondary-opacity: 1; padding-right: 7px'></i>Smoking has been linked to an increased risk of cataracts. Quitting smoking can reduce your risk and improve your overall health.";
+                }
+                if (rand_int == 2){
+                    document.getElementById("result-tip").innerHTML = "<i class='fa-duotone fa-lightbulb' style='--fa-primary-color: #9e9e9e; --fa-secondary-color: #ffbb00; font-size: 1.5rem; --fa-secondary-opacity: 1; padding-right: 7px'></i>A nutritious diet rich in fruits and vegetables, especially those high in vitamins C and E, zeaxanthin, lutein, and antioxidants, may help protect your eyes from cataracts. Include foods like citrus fruits, berries, leafy greens, carrots, and nuts in your diet.";
+                }
+                if (rand_int == 3){
+                    document.getElementById("result-tip").innerHTML = "<i class='fa-duotone fa-lightbulb' style='--fa-primary-color: #9e9e9e; --fa-secondary-color: #ffbb00; font-size: 1.5rem; --fa-secondary-opacity: 1; padding-right: 7px'></i>Certain health conditions like diabetes and high blood pressure can increase the risk of cataracts. By effectively managing these conditions, you can potentially reduce the risk or delay the progression of cataracts.";
+                }
+                if (rand_int == 4){
+                    document.getElementById("result-tip").innerHTML = "<i class='fa-duotone fa-lightbulb' style='--fa-primary-color: #9e9e9e; --fa-secondary-color: #ffbb00; font-size: 1.5rem; --fa-secondary-opacity: 1; padding-right: 7px'></i>Excessive alcohol consumption has been associated with an increased risk of cataracts. Limit your alcohol intake to moderate levels or avoid it altogether.";
+                }
+                if (rand_int == 5){
+                    document.getElementById("result-tip").innerHTML = "<i class='fa-duotone fa-lightbulb' style='--fa-primary-color: #9e9e9e; --fa-secondary-color: #ffbb00; font-size: 1.5rem; --fa-secondary-opacity: 1; padding-right: 7px'></i>Schedule regular eye exams with an ophthalmologist or optometrist. They can detect early signs of cataracts or other eye conditions and provide appropriate guidance.";
+                }
+                if (rand_int == 6){
+                    document.getElementById("result-tip").innerHTML = "<i class='fa-duotone fa-lightbulb' style='--fa-primary-color: #9e9e9e; --fa-secondary-color: #ffbb00; font-size: 1.5rem; --fa-secondary-opacity: 1; padding-right: 7px'></i>When engaging in activities that may pose a risk to your eyes, such as sports, home improvement projects, or working with hazardous materials, wear appropriate eye protection like safety goggles or glasses.";
+                }
+                if (rand_int == 6){
+                    document.getElementById("result-tip").innerHTML = "<i class='fa-duotone fa-lightbulb' style='--fa-primary-color: #9e9e9e; --fa-secondary-color: #ffbb00; font-size: 1.5rem; --fa-secondary-opacity: 1; padding-right: 7px'></i>When engaging in activities that may pose a risk to your eyes, such as sports, home improvement projects, or working with hazardous materials, wear appropriate eye protection like safety goggles or glasses.";
+                }
+                if (rand_int == 7){
+                    document.getElementById("result-tip").innerHTML = "<i class='fa-duotone fa-lightbulb' style='--fa-primary-color: #9e9e9e; --fa-secondary-color: #ffbb00; font-size: 1.5rem; --fa-secondary-opacity: 1; padding-right: 7px'></i>Some medications, such as corticosteroids, may increase the risk of cataracts. If you're taking any medications long-term, discuss with your healthcare provider about potential alternatives or ways to minimize the risk.";
+                }
+				$.ajax({
+					url: "{% url 'analyze_image' %}",
+					type: 'POST',
+					data: formData,
+					processData: false,
+					contentType: false,
+                    async: true,
+                    beforeSend: function(response) {
+                        $("#LoadingAnimation").css('visibility', 'visible');
+                        $("#dialog-heading").css('visibility', 'hidden');
+                        $("#result-heading").css('visibility', 'hidden');
+                        $("#result").css('visibility', 'hidden');
+                        $("#result-tip").css('visibility', 'hidden');
+                        $("#score").css('visibility', 'hidden');
+                        $("#result-cataract-info-divider").css('visibility', 'hidden');
+                        $("#cataract-heading").css('visibility', 'hidden');
+                        $("#cataract-info").css('visibility', 'hidden');
+                        $(".disclaimer").css('visibility', 'hidden');
+                        window.dialog.showModal();
+                    },
+					success: function(response) {
+						$(document).ready(function(){
+                            $(".loading").css('visibility', 'hidden');
+                            $("#dialog-heading").css('visibility', 'visible');
+                            $("#result-heading").css('visibility', 'visible');
+                            $("#result").css('visibility', 'visible');
+                            $("#result-tip").css('visibility', 'visible');
+                            $("#score").css('visibility', 'visible');
+                            $("#result-cataract-info-divider").css('visibility', 'visible');
+                            $("#cataract-heading").css('visibility', 'visible');
+                            $("#cataract-info").css('visibility', 'visible');
+                            $(".disclaimer").css('visibility', 'visible');
+							var result = JSON.parse(response);
+							$('#result').text(result["message"]);
+                            if (result["message"] == "Low risk - Get further evaluation" || result["message"] == "Normal eye"){    
+                                $('#score').attr({
+                                    style: 'display: none'
+                                });
+                                $('#result').attr({
+                                    style: 'background: #b7ffd6;' +
+                                    'margin: 1rem 0 1rem 0;' +
+                                    'padding: 1rem 1.5rem;' +
+                                    'border-radius: 0.7rem;' +
+                                    'text-align: left;'
+                                });
+                                $('#result-tip').attr({
+                                    style: 'display: block'
+                                });
+                            }
+                            else{
+                                var score = ((parseInt(result["score"]))*1.8);
+                                $('#gauge-value').text(Math.round(score*(100/180))+"%");
+                                $('#result').attr({
+                                    style: 'background: #ffc796;' +
+                                    'margin: 1rem 0 1rem 0;' +
+                                    'padding: 1rem 1.5rem;' +
+                                    'border-radius: 0.7rem;' +
+                                    'text-align: left;'
+                                });
+                                $('#result-tip').attr({
+                                    style: 'display: none'
+                                });
+                                $('#score').attr({
+                                    style: 'display: block'
+                                });
+                                $('.semi-circle--mask').attr({
+                                    style: 'transition: all 2s ease-in-out;'
+                                });
+                                $('.gauge--3 .semi-circle--mask').attr({
+                                    style: '-webkit-transform: rotate(' + score + 'deg);' +
+                                    '-moz-transform: rotate(' + score + 'deg);' +
+                                    'transform: rotate(' + score + 'deg);'
+                                });	
+                            }			
+                        });
+						window.dialog.showModal();
+					},
+				});
+			});
+		});
+        $(".x").on("click", function() {
+            window.dialog.close();
+            $(".loading").css('visibility', 'visible');
+        });
+	</script>
+
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito&display=swap');
+    @import url("https://pro.fontawesome.com/releases/v6.0.0-beta1/css/all.css");
+    html {
+        font-size: 62.5%;
+    }
+    body {
+        font-size: 1.4rem;
+        overflow: hidden;
+    }
+
+    h1{
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 5rem;
+        margin: 0;
+        color: black;
+    }
+
+	.user-name{
+		margin: 0 0 0 75%;
+		font-family: 'Nunito', sans-serif;
+		font-weight: 900;
+		position:absolute;
+		font-size: 25px;
+		width: 100%;
+		float:right;
+	}
+
+	.user-name i{
+		padding:0 5px 0 0;
+		opacity: 0.5;
+	}
+
+    #p1{
+        margin-top: 100px;
+    }
+
+	.note{
+		margin-top: 40%;
+		box-shadow: 2px 2px 5px #0000005c;
+		border-radius: 15px;
+		padding: 20px;
+		font-size: 15px;
+	}
+
+    .submit {
+        width: 260px;
+        height:50px;   
+        position: relative;
+        display: block;
+        text-decoration: none;
+        border-radius: 0;
+        overflow: hidden;
+        margin-top: 80px;
+        margin-bottom: 20px;
+        background: #2196F3;
+        text-transform: uppercase;
+    }
+    .submit:hover .wave {
+        top: -200px;
+    }
+    .submit span {
+        position: relative;
+        z-index: 1;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        letter-spacing: 4px;
+    }
+    .submit .wave {
+        width: 260px;
+        height: 260px;
+        background-color: #2196F3;
+        box-shadow: inset 0 0 50px rgba(0, 0, 0, .5);
+        position: absolute;
+        left: 0px;
+        top: -100px;
+        transition: 0.4s;
+    }
+    .submit .wave::before, .submit .wave::after {
+        width: 200%;
+        height: 200%;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -75%);
+    }
+    .submit .wave::before {
+        border-radius: 45%;
+        background-color: rgb(0, 0, 0);
+        animation: wave 5s linear infinite;
+    }
+    .submit .wave::after {
+        border-radius: 40%;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: wave 10s linear infinite;
+    }
+    p{
+        color: black;
+        display: block;
+        font-size:1.8rem;
+        position: absolute;
+    }
+    button {
+        display: block;
+        margin: 0 auto;
+        width: 260px;
+        height: 36px;
+        color: #fff;
+        font-size: 15px;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        background: none;
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .footer{
+        font-family: 'Nunito', sans-serif;
+        color: black;
+        display: block;
+        opacity: 0.8;
+        margin: -12% 0 0 70%;
+        position: relative;
+    }
+    .footer-bottom{
+        margin-top: 20px;
+        font-size:2rem;
+    }
+    .footer-top{
+        margin: 0;
+        font-size:1.5rem;
+    }
+    @keyframes wave {
+        0% {
+            transform: translate(-50%, -75%) rotate(0deg);
+        }
+        100% {
+            transform: translate(-50%, -75%) rotate(360deg);
+        }
+    }
+
+    .container__item {
+	     margin: 0 auto 40px;
+    }
+    .landing-page-container {
+        width: 100%;
+        min-height: 100%;
+        height: 10rem;
+        background-image: url('');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: bottom;
+        overflow: hidden;
+        font-family: 'Nunito', sans-serif;
+        color: #09383e;
+    }
+    .content__wrapper {
+        max-width: 1200px;
+        width: 90%;
+        height: 100%;
+        margin: 0 auto;
+        position: relative;
+    }
+    .header {
+        width: 100%;
+        height: 2rem;
+        padding: 2rem 0;
+        display: block;
+    }
+    .menu-icon {
+        width: 2.5rem;
+        height: 0.5rem;
+        display: inline-block;
+        cursor: pointer;
+    }
+    .header__item {
+        float: left;
+    }
+    .menu-icon__line {
+        width: 1.5rem;
+        height: 0.2rem;
+        background-color: #0c383e;
+        display: block;
+    }
+    .menu-icon__line:before, .menu-icon__line:after {
+        content: '';
+        width: 1.5rem;
+        height: 0.2rem;
+        background-color: #0c383e;
+        display: inline-block;
+        position: relative;
+    }
+    .menu-icon__line:before {
+        left: 0.5rem;
+        top: -0.6rem;
+    }
+    .menu-icon__line:after {
+        top: -1.8rem;
+    }
+    .heading {
+        width: 90%;
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0;
+        line-height: 1.7rem;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .social-container {
+        width: 7.25rem;
+        list-style: none;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        float: right;
+    }
+    .social-container .social__icon {
+        float: left;
+        cursor: pointer;
+    }
+    .social-container .social__icon.social__icon--dr {
+        margin-left: 0.5rem;
+    }
+    .social-container .social__icon.social__icon--dr img {
+        height: 2rem;
+    }
+    .social-container .social__icon.social__icon--in {
+        margin-left: 0.75rem;
+    }
+    .social-container .social__icon.social__icon--in img {
+        height: 2rem;
+    }
+    .social-container .social__icon.social__icon--fb img {
+        height: 2rem;
+        margin: 0rem;
+    }
+    .coords {
+        font-size: 1rem;
+        display: inline-block;
+        transform: rotate(-90deg) translateY(50%);
+        position: relative;
+        top: 40%;
+        letter-spacing: 0.2rem;
+        left: -11.5rem;
+        margin: 0;
+    }
+    .ellipses-container {
+        width: 50rem;
+        height: 50rem;
+        border-radius: 50%;
+        margin: 0 auto;
+        position: relative;
+        top: 10.5rem;
+    }
+    .ellipses-container .greeting {
+        position: absolute;
+        top: 11.6rem;
+        left: 13rem;
+        right: 0;
+        margin: 0 auto;
+        text-transform: uppercase;
+        letter-spacing: 4rem;
+        font-size: 2.2rem;
+        font-weight: 400;
+        opacity: 0.5;
+    }
+    .ellipses-container .greeting:after {
+        content: '';
+        width: 0.3rem;
+        height: 0.3rem;
+        border-radius: 50%;
+        display: inline-block;
+        background-color: #0c383e;
+        position: relative;
+        top: -0.65rem;
+        left: -5.05rem;
+    }
+    .ellipses {
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        border-style: solid;
+    }
+    .ellipses__outer--thin {
+        width: 100%;
+        height: 100%;
+        border-width: 1px;
+        border-color: rgba(0, 0, 0, 0.1);
+        animation: ellipsesOrbit 6s ease-in-out infinite;
+    }
+
+
+    .ellipses__outer--thin:after {
+        content: "";
+        background-image: url('');
+        background-repeat: no-repeat;
+        background-position: center;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        position: absolute;
+        opacity: 0.15;
+    }
+
+    .ellipses__outer--eye{
+        width: 99.5%;
+        height: 99.5%;
+        border-color: #2196F3 transparent;
+        border-width: 2px;
+        transform: rotate(-45deg);
+        animation: eyeRotate 50s ease-in-out infinite;
+
+    }
+    .ellipses__outer--thick {
+        width: 99.5%;
+        height: 99.5%;
+        border-color: #000000 transparent;
+        border-width: 2px;
+        transform: rotate(-45deg);
+        animation: ellipsesRotate 6s ease-in-out infinite;
+    }
+    .ellipses__orbit {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-width: 2px;
+        border-color: #000000;
+        top: 5rem;
+        right: 6.75rem;
+    }
+    .ellipses__orbit:before {
+        content: '';
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 50%;
+        display: inline-block;
+        background-color: #000000;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .scroller {
+        width: 7.5rem;
+        display: inline-block;
+        position: relative;
+        top: -15%;
+        transform: translateY(50%);
+        overflow: hidden;
+    }
+    .scroller .page-title {
+        font-family: 'Playfair Display', serif;
+        letter-spacing: 0.5rem;
+        display: inline-block;
+        margin-top: 1rem;
+    }
+    .scroller .timeline {
+        width: 1.5rem;
+        height: 9rem;
+        display: inline-block;
+    }
+    .scroller .timeline .timeline__unit {
+        width: 100%;
+        height: 0.1rem;
+        display: block;
+        background-color: #0c383e;
+        margin: 0 0 2rem;
+        opacity: 0.2;
+    }
+    .scroller .timeline .timeline__unit.timeline__unit--active {
+        opacity: 1;
+    }
+    .scroller .timeline .timeline__unit.timeline__unit--active:after {
+        opacity: 0.2;
+    }
+    .scroller .timeline .timeline__unit:after {
+        content: '';
+        width: 70%;
+        height: 0.1rem;
+        display: block;
+        position: relative;
+        float: right;
+        background-color: #0c383e;
+        top: 1rem;
+    }
+    @keyframes ellipsesRotate {
+        0% {
+            transform: rotate(-45deg);
+        }
+        100% {
+            transform: rotate(-405deg);
+        }
+    }
+
+    @keyframes eyeRotate {
+        0% {
+            transform: rotate(45deg);
+        }
+        100% {
+            transform: rotate(405deg);
+        }
+    }
+
+    @keyframes ellipsesOrbit {
+        0% {
+            transform: rotate(0);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+ul {
+  position: absolute;
+  width: min(30rem, 50%);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 2rem;
+  list-style: none;
+  color: black;
+  padding:0;
+  margin: 250px 0 0 0;
+  font-family: 'Nunito', sans-serif;
+}
+
+ul li {
+  max-width: 12rem;
+  display: grid;
+  grid-template:
+    "icon"
+    "line"
+    "dot"
+    "title"
+    "descr" 1fr;
+  justify-items: center;
+  align-items: flex-start;
+  text-align: center;
+}
+
+ul li .icon {
+  grid-area: icon;
+  width: 6rem;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 2.5rem;
+  border: 0.4rem solid;
+  border-radius: 50%;
+  background: var(--accent-color);
+  box-shadow: -0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.45),
+    inset -0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.45);
+}
+
+ul li::before {
+  content: "";
+  grid-area: line;
+  height: 2rem;
+  border-right: 2px dotted currentColor;
+}
+
+ul li::after {
+  content: "";
+  grid-area: dot;
+  width: 1rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--accent-color);
+  justify-self: center;
+  margin-bottom: 0.5rem;
+}
+
+ul li .title {
+  grid-area: title;
+  margin-block: 0.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.credits {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}
+.credits a {
+  color: var(--color);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+form{
+    margin: 5rem 4rem 0 90rem;
+    position: absolute;
+    float: right;
+}
+
+label {
+    display: block;
+    width: 260px;
+    margin: 25px auto 0;
+    text-align: left;
+    font-family: 'Nunito', sans-serif;
+}
+
+label span {
+    font-size: 12px;
+    color: #cfcfcf;
+    text-transform: uppercase;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+input, select {
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    font-family: 'Nunito', sans-serif;
+    outline: none;
+}
+
+#name_{
+    padding: 0 0 5px 2.2rem !important;
+}
+
+#age_{
+    padding: 0 0 5px 2.2rem !important;
+}
+
+label i{
+    color: #000;
+    position: absolute;
+    opacity: 0.5;
+    margin: 0.3rem 0 0 0;
+}
+
+#visual-symptoms option{
+    margin-top: 20px;
+}
+
+ [type="file"] + label {
+	 border: none;
+	 color: #ffffff;
+	 cursor: pointer;
+	 display: inline-block;
+	 font-weight: 500;
+	 outline: none;
+	 padding: 18px 20px;
+	 position: relative;
+	 transition: all 0.3s;
+	 vertical-align: middle;
+     text-align: center;
+}
+ [type="file"] + label.btn-3 {
+	 background-color: #2196F3;
+	 border-radius: 0;
+     width:220px;
+	 overflow: hidden;
+     margin: 0;
+}
+ [type="file"] + label.btn-3 span {
+	 display: inline-block;
+	 transition: all 0.3s;
+	 width: 100%;
+     color:#ffffff;
+     font-family: 'Nunito', sans-serif;
+     font-weight: bold;
+     font-size: 12px;
+     letter-spacing: 2px;
+}
+ [type="file"] + label.btn-3::before {
+	 color: #ffffff;
+	 content: "\f0ee";
+     font: var(--fa-font-solid);
+	 font-size: 130%;
+	 height: 100%;
+	 left: 0;
+	 line-height: 2.6;
+	 position: absolute;
+	 top: -180%;
+	 transition: all 0.3s;
+	 width: 100%;
+}
+ [type="file"] + label.btn-3:hover {
+	 background-color: #155589;
+}
+ [type="file"] + label.btn-3:hover span {
+	 transform: translateY(300%);
+}
+ [type="file"] + label.btn-3:hover::before {
+	 top: 3;
+}
+
+#file_path{
+    font-size: 14px;
+    margin-top: 40px;
+    padding: 0;
+	position: absolute;
+}
+
+.image_info{
+    font-family: 'Nunito', sans-serif;
+    color:rgba(0, 0, 0, 0.5);
+    text-decoration: none;
+    margin-top: 20px;
+	position: absolute;
+}
+
+.image_info:hover{
+	cursor: pointer;
+	color: rgb(0, 0, 0);
+}
+
+/*Dialog Styles*/
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(2);
+}
+.loading svg polyline {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.loading svg polyline#back {
+  stroke: rgb(0, 0, 0);
+}
+.loading svg polyline#front {
+  stroke: #2196F3;
+  stroke-dasharray: 12, 36;
+  stroke-dashoffset: 48;
+  animation: dash 1s linear infinite;
+}
+@-moz-keyframes dash {
+  62.5% {
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@-webkit-keyframes dash {
+  62.5% {
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@-o-keyframes dash {
+  62.5% {
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dash {
+  62.5% {
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+dialog {
+	 padding: 1rem 3rem;
+	 background: white;
+	 min-width: 50rem;
+	 min-height: 50rem;
+	 max-width: 70rem;
+	 padding-top: 1rem;
+	 border-radius: 20px;
+	 border: 0;
+	 box-shadow: 0 5px 30px 0 #000;
+	 animation: fadeIn 1s ease both;
+	 font-family: 'Nunito', sans-serif;
+     overflow:hidden;
+}
+ dialog::backdrop {
+	 animation: fadeIn 1s ease both;
+	 z-index: 2;
+	 backdrop-filter: blur(20px);
+}
+ dialog .x {
+	 filter: grayscale(1);
+	 border: none;
+	 background: none;
+	 position: absolute;
+	 top: 25px;
+	 width: 0;
+	 left: 90%;
+	 transition: ease filter, transform 0.3s;
+	 cursor: pointer;
+	 transform-origin: center;
+}
+ dialog .x:hover {
+	 filter: grayscale(0);
+	 transform: scale(1.1);
+}
+ dialog h2 {
+	 font-weight: 600;
+	 font-size: 2.5rem;
+	 padding-bottom: 0;
+}
+ dialog h3{
+	margin-bottom: 0px;
+ }
+ dialog p {
+	position: relative;
+    width: 95%;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.column-row{
+    display: flex;
+}
+
+.column-dialog-1{
+    padding: 0 2rem 0 0;
+    width: 50%;
+}
+ 
+.column-dialog-2{
+    padding: 0;
+    width: 50%;
+}
+
+#cataract-info{
+    font-size: 1.5rem;
+}
+
+#result-tip{
+    border: 1px solid #00000068;
+    border-radius: 0.7rem;
+    padding: 1rem 1.5rem;
+    margin: 2rem 0 1rem 0;
+}
+
+.mask {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    width: 30rem;
+    height: 15rem;
+    margin: 3rem 1.25rem 1.25rem 0.5rem;
+}
+.semi-circle {
+    position: relative;
+    display: block;
+    width: 30rem;
+    height: 15rem;
+    background: linear-gradient(to right, #00ff6e 0%, #d0ff00 33%, #fffb00 66%, #ffdd00 80%, #ff7700 100%);
+    border-radius: 50% 50% 50% 50% / 100% 100% 0% 0%;
+}
+.semi-circle::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    z-index: 1;
+    display: block;
+    width: 20rem;
+    height: 10rem;
+    margin-left: -10rem;
+    background: #fff;
+    border-radius: 50% 50% 50% 50% / 100% 100% 0% 0%;
+    }
+.semi-circle--mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30rem;
+    height: 30rem;
+    background: transparent;
+    transform: rotate(0deg) translate3d(0, 0, 0);
+    transform-origin: center center;
+    backface-visibility: hidden;
+    transition: all 2s ease-in-out;
+}
+.semi-circle--mask::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0%;
+    z-index: 1;
+    display: block;
+    width: 30rem;
+    height: 15rem;
+    margin: -1px 0 0 -1px;
+    background: #f2f2f2;
+    border-radius: 50% 50% 50% 50% / 100% 100% 0% 0%;
+}
+
+.gauge-value-row{
+    text-align: center;
+    margin: 0 0 0 2.5rem;
+    padding: 0;
+    display: flex;
+}
+
+.gauge-value{
+    margin: 0 6.2rem 0 0;
+}
+
+.gauge-value h3{
+    margin: 0 0.5rem 0 0;
+}
+
+.gauge-value h1{
+    font-family: 'Nunito', sans-serif;
+    margin-top: -8rem;
+    z-index: 2;
+    position: relative;
+    min-width: 10.5rem;
+    max-width: 10.5;
+}
+
+dialog a{
+	outline: none;
+}
+
+#result-cataract-info-divider{
+    margin: 3rem 2rem 0 0;
+}
+
+.disclaimer{
+    margin-top: 2rem;
+    margin-right: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    opacity: 0.8;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+    [class*="col-"] {
+        width: 100%;
+        position: relative;
+        overflow: scroll;
+    }
+
+    body{
+        margin: 0;
+        overflow:scroll;
+    }
+
+    .content__wrapper {
+        margin: 0 5%;
+    }
+
+    h1{
+        margin: 0;
+    }
+
+    .user-name{
+		margin: -1% 0 0 70%;
+        font-size: 20px;
+        display: none;
+	}
+
+    a{
+        float: right;
+    }
+
+    #p1{
+        visibility: hidden;
+    }
+
+    #p1:after{
+        content: "This AI powered tool will take in some information and an image of the eye and analyse it to detect if there are any signs of cataract in the eye.";
+        visibility: visible;
+        position: relative;
+        float: left;
+        text-align: left;
+        font-size: 20px;
+        margin-top: -50%;
+    }
+
+    ul {
+        position: absolute;
+        width: 75%;
+        gap: 1rem;
+        margin: 480px 0 0 0;
+    }
+
+    .note{
+        margin-top: 300%;
+        width: 88%;
+    }
+
+    #image_form{
+        position: relative;
+        float: left;
+        font-size: 20px;
+        margin: 180% 0 37% 12%;   
+    }
+
+    #name_{
+        padding: 0 0 5px 3.5rem !important;
+    }
+
+    #age_{
+        padding: 0 0 5px 3rem !important;
+    }
+
+    label i{
+        position: absolute;
+        opacity: 0.5;
+        margin: 0 1rem 0 0 !important;
+    }
+
+    [type="file"] + label.btn-3:hover::before {
+        top: -10px;
+    }
+
+    .image_info{
+        font-size: 15px;
+    }
+
+    .footer{
+        font-family: 'Nunito', sans-serif;
+        height: 10%;
+        width: 100%;
+        padding: 10% 0 0 0;
+        margin: 0;
+        background-color: #000000;
+        opacity: 1;
+        position: absolute;
+    }
+    .footer-top{
+        font-size:1rem;
+        color: #ffffff;
+        margin: 0 0 0 34%;
+    }
+    .footer-bottom{
+        color: #ffffff;
+        font-size:1.2rem;
+        margin: 18px 0 0 30%;
+    }
+    .landing-page-container {
+        height: auto;
+    }
+    .header {
+        width: 100%;
+        padding: 2rem 0;
+        position: relative;
+        z-index: 5;
+        
+    }
+    .header__item {
+        display: inline-block;
+    }
+
+    .ellipses-container {
+        width: 20rem;
+        height: 20rem;
+        border-radius: 50%;
+        margin: 0 auto;
+        position: absolute;
+        top: 46%;
+        left:50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        
+    }
+    .ellipses {
+        border-radius: 50%;
+        position: absolute;
+        border-style: solid;
+    }
+    .ellipses__outer--thin:after {
+        content: "";
+        background-image: url('');
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+    }
+    .ellipses__orbit:before {
+        position: absolute;
+    }
+    .ellipses__outer--eye{
+        width: 99.5%;
+        height: 99.5%;
+        border-color: #09383e transparent;
+        border-width: 0.5px;
+        transform: rotate(-45deg);
+        position: absolute;
+        animation: eyeRotate 50s ease-in-out infinite;
+    }
+    .ellipses__outer--thick {
+        width: 99.5%;
+        height: 99.5%;
+        border-color: #09383e transparent;
+        border-width: 0.5px;
+        transform: rotate(-45deg);
+        position: absolute;
+        animation: ellipsesRotate 6s ease-in-out infinite;
+    }
+    .ellipses__orbit {
+        width: 1rem;
+        height: 1rem;
+        border-width: 0.5px;
+        border-color: #09383e;
+        top: 0;
+        right:13rem;
+        position: absolute;
+    }
+    .ellipses__orbit:before {
+        content: '';
+        width: 0.3rem;
+        height: 0.3rem;
+        border-radius: 50%;
+        display: inline-block;
+        background-color: #09383e;
+        margin: 0 auto;
+        position: absolute;
+        transform: translateY(-50%);
+    }
+
+    
+
+    ul{
+        top: 45%;
+        left:50%;
+        transform: translate(-50%, 0%);
+    }
+    
+    dialog {
+        padding: 1rem 2rem;
+        min-width: 190px;
+        max-width: 31.5rem;
+        margin-right: 5%;
+        margin-left: 5%;
+        max-height: 72rem;
+        overflow: scroll;
+    }
+    dialog::-webkit-scrollbar { 
+        display: none;
+    }
+    dialog .x {
+        top: 30px;
+        left: 85%;
+    }
+    dialog h3{
+        margin-bottom: 0px;
+    }
+    dialog p {
+        width: 100%;
+    }
+    
+    dialog a{
+        outline: none;
+        width: 0;
+        float: none;
+    }
+
+    #result p{
+        font-size: 30px;
+    }
+
+    .column-row{
+        display: block;
+    }
+
+    .column-dialog-1{
+        padding: 0;
+        width: 100%;
+    }
+
+    .column-dialog-2{
+        padding: 0;
+        width: 100%;
+        text-align: justify;
+    }
+
+    #cataract-info{
+        font-size: 1.3rem;
+    }
+
+    #result-tip{
+        font-size: 1.2rem;
+    }
+
+    .disclaimer{
+        text-align: justify;
+    }
+   
+}
+
+</style>
+
+
+</body>
+</html>

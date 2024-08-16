@@ -1,0 +1,726 @@
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Welcome to Drishti</title>
+    </head>
+
+    <body>
+        <!--<img src="\static\drishti\\images\\gaiacceleratedaiparallax.jpg" style="position:absolute;width:100%;height:100%">--> 
+        <div class="container">
+            <div class="container__item landing-page-container">
+                <div class="content__wrapper row">
+                    <header class="header col-1">
+                        <h1 class="header__item">Drishti.</h1>
+                        <a href="{% url 'login' %}">
+                            <span>TRY DEMO</span>
+                            <div class="wave"></div>
+                        </a>
+                        <p id="p1">This AI powered tool will take in some information <br> 
+                            and an image of the eye and analyse it to detect <br>
+                            if there are any signs of cataract <br>
+                            in the eye.</p><br>
+                        <p style="opacity:0.8;" id="p2">This is a data driven algorithm that has <br> learned from data
+                            and gives reports <br> using AI powered algorithms.</p>
+                        
+                    </header>
+                    
+                    <div class="ellipses-container col-2">
+                        <img class="ellipses ellipses__outer--eye" src="\static\drishti\images\blue_eye.png">
+                        <div class="ellipses ellipses__outer--thin">
+                            <div class="ellipses ellipses__orbit"></div>
+                        </div>
+                        <div class="ellipses ellipses__outer--thick"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="contact-form">
+                <h2>Contact Us</h2>
+                <form>
+                    <input type="text" name="name" placeholder="Name" required>
+                    <input type="tel" name="phone" placeholder="Phone" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="text" name="organization" placeholder="Hospital/Organisation" required>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+            <div class="social-links">
+                <a href="your_facebook_url" target="_blank"><img src="facebook_icon.png" alt="Facebook"></a>
+                <a href="your_youtube_url" target="_blank"><img src="youtube_icon.png" alt="YouTube"></a>
+                <a href="your_linkedin_url" target="_blank"><img src="linkedin_icon.png" alt="LinkedIn"></a>
+            </div>
+            <p class="footer-top">Developed and owned by</p>
+            <b><p class="footer-bottom">UNBOX AI</p></b> 
+        </div>
+
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito&display=swap');
+            html {
+                font-size: 62.5%;
+            }
+            body {
+                font-size: 1.4rem;
+                margin: 0;
+            }
+
+            h1{
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 5rem;
+                margin: 0;
+                color: black;
+            }
+
+            a {
+                width: 200px;
+                padding: 20px 0 20px 30px;
+                margin: 10px 0;
+                position: relative;
+                display: block;
+                text-decoration: none;
+                overflow: hidden;
+                float: right;
+            }
+            a:hover .wave {
+                top: -120px;
+            }
+            a span {
+                position: relative;
+                z-index: 1;
+                color: white;
+                font-weight: bold;
+                font-size: 12px;
+                letter-spacing: 4px;
+            }
+            a .wave {
+                width: 200px;
+                height: 200px;
+                background-color: #2196F3;
+                box-shadow: inset 0 0 50px rgba(0, 0, 0, .5);
+                position: absolute;
+                left: -45px;
+                top: -80px;
+                transition: 0.4s;
+                overflow: hidden;
+            }
+            a .wave::before, a .wave::after {
+                width: 200%;
+                height: 200%;
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 60%;
+                transform: translate(-50%, -75%);
+            }
+            a .wave::before {
+                border-radius: 45%;
+                background-color: rgb(0, 0, 0);
+                animation: wave 5s linear infinite;
+            }
+            a .wave::after {
+                border-radius: 40%;
+                background-color: rgba(0, 0, 0, 0.5);
+                animation: wave 10s linear infinite;
+            }
+            p{
+                color: black;
+                display: block;
+                font-size:1.8rem;
+            }
+            #p1{
+                margin-top: 55px;
+            }
+            .footer{
+                font-family: 'Nunito', sans-serif;
+                color: black;
+                display: block;
+                opacity: 0.8;
+                margin: -12% 0 0 70%;
+                position: relative;
+            }
+            .footer-bottom{
+                margin: 0;
+                font-size:2rem;
+            }
+            .footer-top{
+                margin: 0;
+                font-size:1.5rem;
+            }
+            @keyframes wave {
+                0% {
+                    transform: translate(-50%, -75%) rotate(0deg);
+                }
+                100% {
+                    transform: translate(-50%, -75%) rotate(360deg);
+                }
+            }
+
+            .container__item {
+                margin: 0 auto 40px;
+            }
+            .landing-page-container {
+                width: 100%;
+                min-height: 100%;
+                height: 10rem;
+                background-image: url('');
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: bottom;
+                overflow: hidden;
+                font-family: 'Nunito', sans-serif;
+                color: #000000;
+            }
+            .content__wrapper {
+                max-width: 1200px;
+                width: 90%;
+                height: 100%;
+                margin: 0 auto;
+                position: relative;
+            }
+            .header {
+                width: 100%;
+                height: 2rem;
+                padding: 2rem 0;
+                display: block;
+            }
+            .menu-icon {
+                width: 2.5rem;
+                height: 0.5rem;
+                display: inline-block;
+                cursor: pointer;
+            }
+            .header__item {
+                display: inline-block;
+            }
+            .menu-icon__line {
+                width: 1.5rem;
+                height: 0.2rem;
+                background-color: #0c383e;
+                display: block;
+            }
+            .menu-icon__line:before, .menu-icon__line:after {
+                content: '';
+                width: 1.5rem;
+                height: 0.2rem;
+                background-color: #0c383e;
+                display: inline-block;
+                position: relative;
+            }
+            .menu-icon__line:before {
+                left: 0.5rem;
+                top: -0.6rem;
+            }
+            .menu-icon__line:after {
+                top: -1.8rem;
+            }
+            .heading {
+                width: 90%;
+                font-size: 2rem;
+                font-weight: bold;
+                margin: 0;
+                line-height: 1.7rem;
+                margin: 0 auto;
+                text-align: center;
+            }
+            .social-container {
+                width: 7.25rem;
+                list-style: none;
+                overflow: hidden;
+                padding: 0;
+                margin: 0;
+                float: right;
+            }
+            .social-container .social__icon {
+                float: left;
+                cursor: pointer;
+            }
+            .social-container .social__icon.social__icon--dr {
+                margin-left: 0.5rem;
+            }
+            .social-container .social__icon.social__icon--dr img {
+                height: 2rem;
+            }
+            .social-container .social__icon.social__icon--in {
+                margin-left: 0.75rem;
+            }
+            .social-container .social__icon.social__icon--in img {
+                height: 2rem;
+            }
+            .social-container .social__icon.social__icon--fb img {
+                height: 2rem;
+                margin: 0rem;
+            }
+            .coords {
+                font-size: 1rem;
+                display: inline-block;
+                transform: rotate(-90deg) translateY(50%);
+                position: relative;
+                top: 40%;
+                letter-spacing: 0.2rem;
+                left: -11.5rem;
+                margin: 0;
+            }
+            .ellipses-container {
+                width: 50rem;
+                height: 50rem;
+                border-radius: 50%;
+                margin: 0 auto;
+                position: relative;
+                top: 10.5rem;
+            }
+            .ellipses-container .greeting {
+                position: absolute;
+                top: 11.6rem;
+                left: 13rem;
+                right: 0;
+                margin: 0 auto;
+                text-transform: uppercase;
+                letter-spacing: 4rem;
+                font-size: 2.2rem;
+                font-weight: 400;
+                opacity: 0.5;
+            }
+            .ellipses-container .greeting:after {
+                content: '';
+                width: 0.3rem;
+                height: 0.3rem;
+                border-radius: 50%;
+                display: inline-block;
+                background-color: #000;
+                position: relative;
+                top: -0.65rem;
+                left: -5.05rem;
+            }
+            .ellipses {
+                border-radius: 50%;
+                position: absolute;
+                top: 0;
+                border-style: solid;
+            }
+            .ellipses__outer--thin {
+                width: 100%;
+                height: 100%;
+                border-width: 1px;
+                border-color: rgba(0, 0, 0, 0.1);
+                animation: ellipsesOrbit 6s ease-in-out infinite;
+            }
+
+
+            .ellipses__outer--thin:after {
+                content: "";
+                background-image: url('https://s29.postimg.org/5h0r4ftkn/ellipses_dial.png');
+                background-repeat: no-repeat;
+                background-position: center;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                position: absolute;
+                opacity: 0.15;
+            }
+
+            .ellipses__outer--eye{
+                width: 99.5%;
+                height: 99.5%;
+                border-color: #2196F3 transparent;
+                border-width: 2px;
+                transform: rotate(-45deg);
+                animation: eyeRotate 50s ease-in-out infinite;
+
+            }
+            .ellipses__outer--thick {
+                width: 99.5%;
+                height: 99.5%;
+                border-color: #000000 transparent;
+                border-width: 2px;
+                transform: rotate(-45deg);
+                animation: ellipsesRotate 6s ease-in-out infinite;
+            }
+            .ellipses__orbit {
+                width: 2.5rem;
+                height: 2.5rem;
+                border-width: 2px;
+                border-color: #000;
+                top: 5rem;
+                right: 6.75rem;
+            }
+            .ellipses__orbit:before {
+                content: '';
+                width: 0.7rem;
+                height: 0.7rem;
+                border-radius: 50%;
+                display: inline-block;
+                background-color: #000;
+                margin: 0 auto;
+                left: 0;
+                right: 0;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            .scroller {
+                width: 7.5rem;
+                display: inline-block;
+                position: relative;
+                top: -15%;
+                transform: translateY(50%);
+                overflow: hidden;
+            }
+            .scroller .page-title {
+                font-family: 'Playfair Display', serif;
+                letter-spacing: 0.5rem;
+                display: inline-block;
+                margin-top: 1rem;
+            }
+            .scroller .timeline {
+                width: 1.5rem;
+                height: 9rem;
+                display: inline-block;
+            }
+            .scroller .timeline .timeline__unit {
+                width: 100%;
+                height: 0.1rem;
+                display: block;
+                background-color: #000;
+                margin: 0 0 2rem;
+                opacity: 0.2;
+            }
+            .scroller .timeline .timeline__unit.timeline__unit--active {
+                opacity: 1;
+            }
+            .scroller .timeline .timeline__unit.timeline__unit--active:after {
+                opacity: 0.2;
+            }
+            .scroller .timeline .timeline__unit:after {
+                content: '';
+                width: 70%;
+                height: 0.1rem;
+                display: block;
+                position: relative;
+                float: right;
+                background-color: #000;
+                top: 1rem;
+            }
+            @keyframes ellipsesRotate {
+                0% {
+                    transform: rotate(-45deg);
+                }
+                100% {
+                    transform: rotate(-405deg);
+                }
+            }
+
+            @keyframes eyeRotate {
+                0% {
+                    transform: rotate(45deg);
+                }
+                100% {
+                    transform: rotate(405deg);
+                }
+            }
+
+            @keyframes ellipsesOrbit {
+                0% {
+                    transform: rotate(0);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
+        @media only screen and (max-width: 1300px) {
+        /* For mobile phones: */
+            [class*="col-"] {
+                width: 100%;
+                position: relative;
+            }
+
+            body{
+                overflow: hidden;
+            }
+
+            .content__wrapper {
+                margin: 0 5%;
+            }
+
+            h1{
+                margin: 2rem 0 0 0;
+                font-size: 15rem;
+            }
+
+            a{
+                float: left;
+                margin: 110% 0 0 0;
+                position: absolute;
+                width: 100%;
+                height: 175px;
+                text-align: center;
+                padding: 50px 0 0 0;
+            }
+
+            a:hover .wave{
+                height: 117%;
+            }
+
+            a span {
+                position: relative;
+                z-index: 1;
+                color: white;
+                font-weight: bold;
+                font-size: 35px;
+                letter-spacing: 4px;
+                text-align: center;
+            }
+            a .wave {
+                width: 100%;
+                height: 100%;
+                left: 0;
+                transition: 0.4s;
+                overflow: hidden;
+            }
+            a .wave::before, a .wave::after {
+                width: 200%;
+                height: 800%;
+                content: '';
+                position: absolute;
+                top: -120%;
+                left: 50%;
+                transform: translate(-50%, -75%);
+            }
+            a .wave::before {
+                border-radius: 45%;
+                background-color: rgb(0, 0, 0);
+                animation: wave 5s linear infinite;
+            }
+            a .wave::after {
+                border-radius: 40%;
+                background-color: rgba(0, 0, 0, 0.5);
+                animation: wave 10s linear infinite;
+            }
+
+            #p1{
+                margin: 0;
+                visibility: hidden;
+            }
+
+            #p1:after{
+                content: "This AI powered tool will take in some information and an image of the eye and analyse it to detect if there are any signs of cataract in the eye.";
+                visibility: visible;
+                position: relative;
+                float: left;
+                font-size: 35px;
+                margin-top: 0;
+            }
+
+            #p2{
+                visibility: hidden;
+            }
+
+            #p2:after{
+                content: "This is a data driven algorithm that has learned from data and gives reports using AI powered algorithms.";
+                visibility: visible;
+                margin-top: 85rem;
+                font-size: 35px;
+                text-align: left;
+                float: left;
+            }
+
+            .footer {
+                font-family: 'Nunito', sans-serif;
+                color: black;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem 0;
+                background-color: #f5f5f5;
+                margin: 0;
+                position: relative;
+            }
+
+            .contact-form {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            .contact-form h2 {
+                font-size: 2.4rem;
+                margin-bottom: 1rem;
+            }
+
+            .contact-form form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .contact-form input {
+                width: 100%;
+                max-width: 300px;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            .contact-form button {
+                padding: 1rem 2rem;
+                background-color: #2196F3;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 1.6rem;
+            }
+
+            .social-links {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 2rem;
+            }
+
+            .social-links a {
+                display: inline-block;
+                margin: 0 1rem;
+                color: #555;
+                font-size: 2.4rem;
+                transition: color 0.3s ease;
+            }
+
+            .social-links a:hover {
+                color: #2196F3;
+            }
+
+            .footer-top {
+                font-size: 1.6rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .footer-bottom {
+                font-size: 1.8rem;
+                margin: 0;
+            }
+
+            @media only screen and (max-width: 1300px) {
+                .footer {
+                    padding: 3rem 0;
+                    margin-top: 3rem;
+                    background-color: #000000;
+                    color: #ffffff;
+                }
+
+                .footer-top {
+                    font-size: 2rem;
+                    margin-bottom: 1rem;
+                }
+
+                .footer-bottom {
+                    font-size: 2.4rem;
+                }
+            }
+
+            .landing-page-container {
+                width: 100%;
+                min-height: 100%;
+                height: auto;
+                background-image: url('');
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: bottom;
+                font-family: 'Montserrat', sans-serif;
+                color: #000;
+                overflow: hidden;
+            }
+            .header {
+                width: 100%;
+                height: auto;
+                padding: 2rem 0;
+                position: relative;
+                z-index: 5;
+            }
+            .header__item {
+                display: inline-block;
+            }
+
+            .ellipses-container {
+                width: 50rem;
+                height: 50rem;
+                border-radius: 50%;
+                margin: 0 auto;
+                position: absolute;
+                top: 45%;
+                left:50%;
+                transform: translate(-50%, -50%);
+                z-index: 1;
+                
+            }
+            .ellipses {
+                border-radius: 50%;
+                position: absolute;
+                border-style: solid;
+            }
+            .ellipses__outer--thin:after {
+                content: "";
+                background-image: url('');
+                background-repeat: no-repeat;
+                background-position: center;
+                position: absolute;
+                opacity: 0.15;
+            }
+            .ellipses__orbit:before {
+                display: inline-block;
+                position: absolute;
+                
+            }
+            .ellipses__outer--eye{
+                width: 99.5%;
+                height: 99.5%;
+                border-color: #09383e transparent;
+                border-width: 2px;
+                transform: rotate(-45deg);
+                position: absolute;
+                
+                animation: eyeRotate 50s ease-in-out infinite;
+
+            }
+            .ellipses__outer--thick {
+                width: 99.5%;
+                height: 99.5%;
+                border-color: #09383e transparent;
+                border-width: 2px;
+                transform: rotate(-45deg);
+                position: absolute;
+                
+                animation: ellipsesRotate 6s ease-in-out infinite;
+            }
+            .ellipses__orbit {
+                width: 2.5rem;
+                height: 2.5rem;
+                border-width: 2px;
+                border-color: #09383e;
+                top: 5rem;
+                right: 6.75rem;
+                position: absolute;
+                
+            }
+            .ellipses__orbit:before {
+                content: '';
+                width: 0.7rem;
+                height: 0.7rem;
+                border-radius: 50%;
+                display: inline-block;
+                background-color: #09383e;
+                margin: 0 auto;
+                position: absolute;
+                transform: translateY(-50%);
+            }
+
+        
+        }
+        
+        </style>
+
+
+
+    </body>
+</html>

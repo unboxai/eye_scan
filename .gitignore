@@ -1,0 +1,21 @@
+# Virtual Environment
+/home/eye_scan/ctworld/
+
+# User uploaded images
+/static/drishti/images/user_images
+/staticfiles/drishti/images/user_images
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+
+# Other common files to ignore
+.DS_Store
+*.swp
+*.swo
+/ctworld/
